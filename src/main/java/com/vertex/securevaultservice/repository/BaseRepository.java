@@ -20,4 +20,11 @@ public interface BaseRepository<T, I> extends JpaRepository<T, I>, JpaSpecificat
         return CompletableFuture.supplyAsync(() -> findById(id), CustomThreadPool.getDatabaseExecutor())
                 .thenApplyAsync(result -> result, CustomThreadPool.getComputationExecutor());
     }
+
+    default CompletionStage<T> remove(T t) {
+        return CompletableFuture.supplyAsync(() -> {
+            delete(t);
+            return t;
+        }, CustomThreadPool.getDatabaseExecutor()).thenApplyAsync(result -> result, CustomThreadPool.getComputationExecutor());
+    }
 }
