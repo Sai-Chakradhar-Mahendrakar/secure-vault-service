@@ -7,17 +7,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "vault_records")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VaultRecord {
+@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+public class VaultRecord extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "vault_record_id", length = 36, nullable = false, updatable = false)
