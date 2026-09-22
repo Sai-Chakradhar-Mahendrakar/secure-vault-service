@@ -12,18 +12,29 @@ public class CustomThreadPool {
     private static final ThreadPoolTaskExecutor HTTP_CLIENT_THREAD_POOL;
 
     static {
-        COMPUTATION_THREAD_POOL = getExecutor("computationThread-");
-        DB_THREAD_POOL = getExecutor("databaseThread-");
-        HTTP_CLIENT_THREAD_POOL = getExecutor("httpClientThread-");
+        int cpuCount = Runtime.getRuntime().availableProcessors();
+        COMPUTATION_THREAD_POOL = getExecutor("computationThread-", cpuCount, cpuCount * 2, 100, 30);
+        DB_THREAD_POOL = getExecutor("databaseThread-", cpuCount, cpuCount * 4, 100, 30);
+        HTTP_CLIENT_THREAD_POOL = getExecutor("httpClientThread-", 20, 50, 200, 60);
     }
 
-    private static ThreadPoolTaskExecutor getExecutor(String prefix) {
-        var customThreadPool = new ThreadPoolTaskExecutor();
-        customThreadPool.setCorePoolSize(Runtime.getRuntime().availableProcessors());
-        customThreadPool.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
-        customThreadPool.setThreadNamePrefix(prefix);
-        customThreadPool.setKeepAliveSeconds(180);
-        customThreadPool.setQueueCapacity(100);
+    private static ThreadPoolTaskExecutor getExecutor(
+            String threadNamePrefix,
+            int corePoolSize,
+            int maxPoolSize,
+            int queueCapacity,
+            int keepAliveSeconds
+    ) {
+        ThreadPoolTaskExecutor customThreadPool = new ThreadPoolTaskExecutor();
+        customThreadPool.setCorePoolSize(corePoolSize);
+        customThreadPool.setMaxPoolSize(maxPoolSize);
+        customThreadPool.setThreadNamePrefix(threadNamePrefix);
+        customThreadPool.setQueueCapacity(queueCapacity);
+        customThreadPool.setKeepAliveSeconds(keepAliveSeconds);
+
+        customThreadPool.setWaitForTasksToCompleteOnShutdown(true);
+        customThreadPool.setAwaitTerminationSeconds(30);
+
         customThreadPool.initialize();
         return customThreadPool;
     }
