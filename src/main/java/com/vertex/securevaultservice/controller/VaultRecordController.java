@@ -47,8 +47,8 @@ public class VaultRecordController {
                 .thenApply(vaultRecordResponsePage -> ResponseEntity.ok(vaultRecordResponsePage));
     }
 
-    @DeleteMapping
-    public CompletionStage<ResponseEntity<VaultRecordResponse>> deleteVaultRecord(@RequestParam String vaultRecordId) {
+    @DeleteMapping("/{vaultRecordId}")
+    public CompletionStage<ResponseEntity<VaultRecordResponse>> deleteVaultRecord(@PathVariable String vaultRecordId) {
         return vaultRecordService.deleteVaultRecord(vaultRecordId)
                 .thenApply(vaultRecordResponse -> ResponseEntity.ok(vaultRecordResponse));
     }
