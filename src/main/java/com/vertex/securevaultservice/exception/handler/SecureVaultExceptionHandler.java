@@ -32,7 +32,7 @@ public class SecureVaultExceptionHandler {
             MethodArgumentTypeMismatchException.class, ServletRequestBindingException.class, ValidationException.class, HttpMessageNotReadableException.class,
             HttpClientErrorException.BadRequest.class, IllegalArgumentException.class})
     public ResponseEntity<SecureVaultError> handleRequestValidationErrors(Exception ex) {
-        return handleException(ex, BAD_REQUEST, BAD_REQUEST.getErrorMessage(), BAD_REQUEST.getHttpStatus());
+        return handleException(ex, BAD_REQUEST, ex.getMessage(), BAD_REQUEST.getHttpStatus());
     }
 
     @ExceptionHandler(value = SecureVaultException.class)
