@@ -1,11 +1,12 @@
 package com.vertex.securevaultservice.controller;
 
 import com.vertex.securevaultservice.request.CreateVaultRecordRequest;
+import com.vertex.securevaultservice.response.PagedResponse;
 import com.vertex.securevaultservice.response.VaultRecordResponse;
 import com.vertex.securevaultservice.service.VaultRecordService;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,11 +39,17 @@ public class VaultRecordController {
     }
 
     @GetMapping
-    public CompletionStage<ResponseEntity<Page<VaultRecordResponse>>> getVaultRecordsForUser(
+    public CompletionStage<ResponseEntity<PagedResponse<VaultRecordResponse>>> getVaultRecordsForUser(
             @RequestParam String userId,
             @RequestParam Integer page,
-            @RequestParam Integer pageSize) {
-        return vaultRecordService.getAllVaultRecords(userId, page, pageSize)
+            @RequestParam Integer size) {
+        return vaultRecordService.getAllVaultRecords(userId, page, size)
                 .thenApply(vaultRecordResponsePage -> ResponseEntity.ok(vaultRecordResponsePage));
+    }
+
+    @DeleteMapping
+    public CompletionStage<ResponseEntity<VaultRecordResponse>> deleteVaultRecord(@RequestParam String vaultRecordId) {
+        return vaultRecordService.deleteVaultRecord(vaultRecordId)
+                .thenApply(vaultRecordResponse -> ResponseEntity.ok(vaultRecordResponse));
     }
 }

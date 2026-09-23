@@ -4,10 +4,10 @@ import com.vertex.securevaultservice.error.SecureVaultErrorType;
 import com.vertex.securevaultservice.exception.SecureVaultException;
 import com.vertex.securevaultservice.repository.dao.VaultRecordDao;
 import com.vertex.securevaultservice.request.CreateVaultRecordRequest;
+import com.vertex.securevaultservice.response.PagedResponse;
 import com.vertex.securevaultservice.response.VaultRecordResponse;
 import com.vertex.securevaultservice.service.UserKeyService;
 import com.vertex.securevaultservice.service.VaultRecordService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -54,10 +54,10 @@ public class VaultRecordServiceImpl implements VaultRecordService {
     }
 
     @Override
-    public CompletionStage<Page<VaultRecordResponse>> getAllVaultRecords(String userId, Integer page, Integer pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
+    public CompletionStage<PagedResponse<VaultRecordResponse>> getAllVaultRecords(String userId, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
         return vaultRecordDao.getByUserId(userId, pageable)
-                .thenApply(vaultRecordPage -> vaultRecordPage.map(VaultRecordResponse::from));
+                .thenApply(vaultRecordPage -> PagedResponse.from(vaultRecordPage.map(VaultRecordResponse::from)));
     }
 
     @Override

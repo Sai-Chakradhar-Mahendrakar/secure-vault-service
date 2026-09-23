@@ -4,14 +4,15 @@ import com.vertex.securevaultservice.error.SecureVaultError;
 import com.vertex.securevaultservice.error.SecureVaultErrorType;
 import com.vertex.securevaultservice.exception.SecureVaultException;
 import jakarta.validation.ValidationException;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
+
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.Optional;
 import static com.vertex.securevaultservice.error.SecureVaultErrorType.BAD_REQUEST;
 import static com.vertex.securevaultservice.error.SecureVaultErrorType.INTERNAL_SERVER_ERROR;
 
-@Configuration
+@ControllerAdvice
 public class SecureVaultExceptionHandler {
     @ExceptionHandler(value = { Exception.class })
     public ResponseEntity<SecureVaultError> handleGenericException(Exception ex) {

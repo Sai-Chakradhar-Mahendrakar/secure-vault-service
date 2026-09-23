@@ -2,8 +2,6 @@ package com.vertex.securevaultservice.request;
 
 import com.vertex.securevaultservice.entity.VaultRecord;
 
-import java.util.UUID;
-
 public record CreateVaultRecordRequest(
         String userId,
         String encryptedPayload,
@@ -12,13 +10,12 @@ public record CreateVaultRecordRequest(
         String digitalSignature
 ) {
     public VaultRecord toEntity() {
-        return new VaultRecord(
-                UUID.randomUUID().toString(),
-                userId,
-                encryptedPayload,
-                aesIv,
-                wrappedAesKey,
-                digitalSignature
-        );
+        return VaultRecord.builder()
+                .userId(userId)
+                .encryptedPayload(encryptedPayload)
+                .aesIv(aesIv)
+                .wrappedAesKey(wrappedAesKey)
+                .digitalSignature(digitalSignature)
+                .build();
     }
 }
