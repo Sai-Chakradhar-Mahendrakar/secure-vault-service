@@ -7,6 +7,7 @@ import com.vertex.securevaultservice.response.UserKeyResponse;
 import com.vertex.securevaultservice.service.UserKeyService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @Service
@@ -18,7 +19,13 @@ public class UserKeyServiceImpl implements UserKeyService {
     }
 
     @Override
-    public CompletionStage<UserKeyResponse> addUserKey(String userId, AddUserPublicKeyRequest addUserPublicKeyRequest) {
+    public CompletionStage<Optional<UserKey>> findById(String userId) {
+        return userKeyDao.getByUserId(userId)
+                .thenApply(Optional::ofNullable);
+    }
+
+    @Override
+    public CompletionStage<UserKeyResponse> upsertUserKey(String userId, AddUserPublicKeyRequest addUserPublicKeyRequest) {
         return userKeyDao.getByUserId(userId)
                 .thenCompose(existingUserKey -> {
                     UserKey userKeyToPersist = existingUserKey != null
