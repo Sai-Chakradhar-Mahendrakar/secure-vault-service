@@ -30,8 +30,12 @@ public class UserKeyServiceImpl implements UserKeyService {
                 .thenCompose(existingUserKey -> {
                     UserKey userKeyToPersist = existingUserKey != null
                             ? existingUserKey.toBuilder()
-                                    .rsaPublicKey(addUserPublicKeyRequest.rsaPublicKey())
-                                    .ecdsaPublicKey(addUserPublicKeyRequest.ecdsaPublicKey())
+                                    .rsaPublicKey(addUserPublicKeyRequest.rsaPublicKey() != null
+                                            ? addUserPublicKeyRequest.rsaPublicKey()
+                                            : existingUserKey.getRsaPublicKey())
+                                    .ecdsaPublicKey(addUserPublicKeyRequest.ecdsaPublicKey() != null
+                                            ? addUserPublicKeyRequest.ecdsaPublicKey()
+                                            : existingUserKey.getEcdsaPublicKey())
                                     .build()
                             : addUserPublicKeyRequest.toEntity(userId);
                     return userKeyDao.persist(userKeyToPersist);
