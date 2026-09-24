@@ -5,12 +5,14 @@ import lombok.Builder;
 
 @Builder
 public record AddUserPublicKeyRequest(
-        String rsaPublicKey
+        String rsaPublicKey,
+        String ecdsaPublicKey
 ) {
     public UserKey toEntity(String userId) {
         return UserKey.builder()
                 .userId(userId)
                 .rsaPublicKey(rsaPublicKey)
+                .ecdsaPublicKey(ecdsaPublicKey)
                 .build();
     }
 }

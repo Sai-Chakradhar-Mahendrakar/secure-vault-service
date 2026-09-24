@@ -7,6 +7,7 @@ import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +18,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.vertex.securevaultservice.error.SecureVaultErrorType.BAD_REQUEST;
 import static com.vertex.securevaultservice.error.SecureVaultErrorType.INTERNAL_SERVER_ERROR;
@@ -26,6 +28,14 @@ public class SecureVaultExceptionHandler {
     @ExceptionHandler(value = { Exception.class })
     public ResponseEntity<SecureVaultError> handleGenericException(Exception ex) {
         return handleException(ex, INTERNAL_SERVER_ERROR, ex.getMessage(), INTERNAL_SERVER_ERROR.getHttpStatus());
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<SecureVaultError> handleValidationErrors(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+        return handleException(ex, BAD_REQUEST, message, BAD_REQUEST.getHttpStatus());
     }
 
     @ExceptionHandler(value = {MissingServletRequestParameterException.class, HttpMessageNotReadableException.class, IllegalStateException.class,

@@ -4,6 +4,7 @@ import com.vertex.securevaultservice.request.CreateVaultRecordRequest;
 import com.vertex.securevaultservice.response.PagedResponse;
 import com.vertex.securevaultservice.response.VaultRecordResponse;
 import com.vertex.securevaultservice.service.VaultRecordService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ public class VaultRecordController {
     }
 
     @PostMapping
-    public CompletionStage<ResponseEntity<VaultRecordResponse>> createVaultRecord(@RequestBody CreateVaultRecordRequest createVaultRecordRequest) {
+    public CompletionStage<ResponseEntity<VaultRecordResponse>> createVaultRecord(@Valid @RequestBody CreateVaultRecordRequest createVaultRecordRequest) {
         return vaultRecordService.createVaultRecord(createVaultRecordRequest)
                 .thenApply(vaultRecordResponse -> ResponseEntity.status(HttpStatus.CREATED).body(vaultRecordResponse));
     }
