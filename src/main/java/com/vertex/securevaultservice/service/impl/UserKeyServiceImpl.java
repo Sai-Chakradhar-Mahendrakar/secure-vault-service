@@ -31,6 +31,7 @@ public class UserKeyServiceImpl implements UserKeyService {
                     UserKey userKeyToPersist = existingUserKey != null
                             ? existingUserKey.toBuilder()
                                     .rsaPublicKey(addUserPublicKeyRequest.rsaPublicKey())
+                                    .ecdsaPublicKey(addUserPublicKeyRequest.ecdsaPublicKey())
                                     .build()
                             : addUserPublicKeyRequest.toEntity(userId);
                     return userKeyDao.persist(userKeyToPersist);

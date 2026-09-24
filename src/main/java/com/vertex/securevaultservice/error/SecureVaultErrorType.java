@@ -15,7 +15,8 @@ public enum SecureVaultErrorType {
     BAD_REQUEST("ERR_SV_005", "Bad request", HttpStatus.BAD_REQUEST),
     COLLECTION_WRITE_ERROR("ERR_SV_006", "Error in writing to collection", HttpStatus.INTERNAL_SERVER_ERROR),
     JSON_PARSING_ERROR("ERR_SV_007", "Failed to parse JSON payload", HttpStatus.BAD_REQUEST),
-    EVENT_PUBLISHING_ERROR("ERR_SV_008", "Failed to publish event to Kafka", HttpStatus.INTERNAL_SERVER_ERROR);
+    EVENT_PUBLISHING_ERROR("ERR_SV_008", "Failed to publish event to Kafka", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_SIGNATURE("ERR_SV_009", "Signature verification failed", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final String errorMessage;

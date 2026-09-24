@@ -24,4 +24,7 @@ public class UserKey extends BaseEntity{
 
     @Column(name = "rsa_public_key", length = 2000)
     private String rsaPublicKey;
+
+    @Column(name = "ecdsa_public_key", length = 500)
+    private String ecdsaPublicKey;
 }

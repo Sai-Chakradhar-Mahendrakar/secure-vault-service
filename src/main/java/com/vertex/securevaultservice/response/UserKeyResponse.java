@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record UserKeyResponse(
         String userId,
         String rsaPublicKey,
+        String ecdsaPublicKey,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Long version
@@ -15,6 +16,7 @@ public record UserKeyResponse(
         return new UserKeyResponse(
                 userKey.getUserId(),
                 userKey.getRsaPublicKey(),
+                userKey.getEcdsaPublicKey(),
                 userKey.getCreatedAt(),
                 userKey.getUpdatedAt(),
                 userKey.getVersion()

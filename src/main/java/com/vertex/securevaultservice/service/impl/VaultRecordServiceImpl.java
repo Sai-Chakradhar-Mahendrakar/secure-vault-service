@@ -1,5 +1,7 @@
 package com.vertex.securevaultservice.service.impl;
 
+import com.vertex.securevaultservice.crypto.EcdsaSignatureVerifier;
+import com.vertex.securevaultservice.entity.UserKey;
 import com.vertex.securevaultservice.error.SecureVaultErrorType;
 import com.vertex.securevaultservice.exception.SecureVaultException;
 import com.vertex.securevaultservice.repository.dao.VaultRecordDao;
@@ -18,10 +20,12 @@ import java.util.concurrent.CompletionStage;
 public class VaultRecordServiceImpl implements VaultRecordService {
     private final VaultRecordDao vaultRecordDao;
     private final UserKeyService userKeyService;
+    private final EcdsaSignatureVerifier ecdsaSignatureVerifier;
 
-    public VaultRecordServiceImpl(VaultRecordDao vaultRecordDao, UserKeyService userKeyService) {
+    public VaultRecordServiceImpl(VaultRecordDao vaultRecordDao, UserKeyService userKeyService, EcdsaSignatureVerifier ecdsaSignatureVerifier) {
         this.vaultRecordDao = vaultRecordDao;
         this.userKeyService = userKeyService;
+        this.ecdsaSignatureVerifier = ecdsaSignatureVerifier;
     }
 
     @Override
@@ -32,6 +36,24 @@ public class VaultRecordServiceImpl implements VaultRecordService {
                         throw new SecureVaultException(
                                 "No UserKey registered for userId: " + createVaultRecordRequest.userId(),
                                 SecureVaultErrorType.BAD_REQUEST
+                        );
+                    }
+                    UserKey userKey = existingUserKey.get();
+                    if (userKey.getEcdsaPublicKey() == null) {
+                        throw new SecureVaultException(
+                                "UserKey for userId: " + createVaultRecordRequest.userId() + " does not have an ECDSA public key registered.",
+                                SecureVaultErrorType.BAD_REQUEST
+                        );
+                    }
+                    boolean valid = ecdsaSignatureVerifier.verifySignature(
+                            userKey.getEcdsaPublicKey(),
+                            createVaultRecordRequest.digitalSignature(),
+                            createVaultRecordRequest.encryptedPayload()
+                    );
+                    if (!valid) {
+                        throw new SecureVaultException(
+                                "Invalid digital signature for userId: " + createVaultRecordRequest.userId(),
+                                SecureVaultErrorType.INVALID_SIGNATURE
                         );
                     }
                     return vaultRecordDao.persist(createVaultRecordRequest.toEntity());
