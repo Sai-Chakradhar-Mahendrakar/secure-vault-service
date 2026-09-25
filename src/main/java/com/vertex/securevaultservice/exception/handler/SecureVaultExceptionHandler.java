@@ -46,7 +46,7 @@ public class SecureVaultExceptionHandler {
     }
 
     @ExceptionHandler(value = SecureVaultException.class)
-    public ResponseEntity<SecureVaultError> handleAtlasServiceException(SecureVaultException ex) {
+    public ResponseEntity<SecureVaultError> handleSecureBVaultException(SecureVaultException ex) {
         return handleException(
                 ex,
                 ex.getErrorType(),
