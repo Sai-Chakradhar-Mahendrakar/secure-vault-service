@@ -8,6 +8,7 @@ public record UserKeyResponse(
         String userId,
         String rsaPublicKey,
         String ecdsaPublicKey,
+        String ecdhPublicKey,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         Long version
@@ -17,6 +18,7 @@ public record UserKeyResponse(
                 userKey.getUserId(),
                 userKey.getRsaPublicKey(),
                 userKey.getEcdsaPublicKey(),
+                userKey.getEcdhPublicKey(),
                 userKey.getCreatedAt(),
                 userKey.getUpdatedAt(),
                 userKey.getVersion()

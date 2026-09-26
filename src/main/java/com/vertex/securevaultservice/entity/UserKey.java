@@ -27,4 +27,7 @@ public class UserKey extends BaseEntity{
 
     @Column(name = "ecdsa_public_key", length = 500)
     private String ecdsaPublicKey;
+
+    @Column(name = "ecdh_public_key", length = 500)
+    private String ecdhPublicKey;
 }

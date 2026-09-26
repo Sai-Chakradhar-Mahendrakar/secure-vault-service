@@ -30,16 +30,17 @@ public class UserKeyServiceImpl implements UserKeyService {
                 .thenCompose(existingUserKey -> {
                     UserKey userKeyToPersist = existingUserKey != null
                             ? existingUserKey.toBuilder()
-                                    .rsaPublicKey(addUserPublicKeyRequest.rsaPublicKey() != null
-                                            ? addUserPublicKeyRequest.rsaPublicKey()
-                                            : existingUserKey.getRsaPublicKey())
-                                    .ecdsaPublicKey(addUserPublicKeyRequest.ecdsaPublicKey() != null
-                                            ? addUserPublicKeyRequest.ecdsaPublicKey()
-                                            : existingUserKey.getEcdsaPublicKey())
+                                    .rsaPublicKey(coalesce(addUserPublicKeyRequest.rsaPublicKey(), existingUserKey.getRsaPublicKey()))
+                                    .ecdsaPublicKey(coalesce(addUserPublicKeyRequest.ecdsaPublicKey(), existingUserKey.getEcdsaPublicKey()))
+                                    .ecdhPublicKey(coalesce(addUserPublicKeyRequest.ecdhPublicKey(), existingUserKey.getEcdhPublicKey()))
                                     .build()
                             : addUserPublicKeyRequest.toEntity(userId);
                     return userKeyDao.persist(userKeyToPersist);
                 })
                 .thenApply(UserKeyResponse::from);
+    }
+
+    private static String coalesce(String newValue, String existingValue) {
+        return newValue != null ? newValue : existingValue;
     }
 }
