@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 scripts/.vault_demo_keys/
+__pycache__/
+*.pyc
+.DS_Store
 
 ### STS ###
 .apt_generated
