@@ -1,6 +1,5 @@
 package com.vertex.securevaultservice.controller;
 
-import com.vertex.securevaultservice.entity.UserKey;
 import com.vertex.securevaultservice.request.AddUserPublicKeyRequest;
 import com.vertex.securevaultservice.response.UserKeyResponse;
 import com.vertex.securevaultservice.service.UserKeyService;

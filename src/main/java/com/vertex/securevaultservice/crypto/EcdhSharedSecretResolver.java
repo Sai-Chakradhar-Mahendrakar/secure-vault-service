@@ -23,7 +23,7 @@ public class EcdhSharedSecretResolver {
         return keyAgreement.generateSecret();
     }
 
-    private byte[] deriveHmacKey(byte[] sharedSecret) throws NoSuchAlgorithmException {
+    public byte[] deriveHmacKey(byte[] sharedSecret) throws NoSuchAlgorithmException {
         return MessageDigest.getInstance("SHA-256").digest(sharedSecret);
     }
 
